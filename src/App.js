@@ -1,23 +1,23 @@
-import React, { useState } from "react";
-import TodoList from "./TodoList";
-import AddTodoForm from "./AddTodoForm";
+// App.js
+import React, { useState } from 'react';
+import TodoList from './TodoList';
+import AddTodoForm from './AddTodoForm';
 
-// Define the App component
 function App() {
-  const [newTodo, setNewTodo] = useState(""); // State variable for new todo
+  const [todoList, setTodoList] = useState([]); // Create new state variable todoList
 
-  // Render the App component
+  // Handle adding a new todo
+  function addTodo(newTodo) {
+    setTodoList([...todoList, newTodo]); // Update todoList state by adding the new todo
+  }
+
   return (
     <div>
-      <h1>Todo List</h1> {/* Render a level-one heading */}
-      <TodoList /> {/* Render the TodoList component */}
-      <AddTodoForm onAddTodo={setNewTodo} /> {/* Render the AddTodoForm component and pass onAddTodo callback */}
-      <p>New Todo: {newTodo}</p> {/* Display the new todo value */}
+      <h1>Todo List</h1>
+      <AddTodoForm onAddTodo={addTodo} /> {/* Update onAddTodo prop */}
+      <TodoList todoList={todoList} /> {/* Pass todoList state as a prop */}
     </div>
   );
 }
 
 export default App;
-
-
-
