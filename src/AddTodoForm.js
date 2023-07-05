@@ -1,26 +1,40 @@
-import React from 'react'
+// AddTodoForm.js
+import React, { useState } from 'react';
 
-// Define the AddTodoForm component
-function AddTodoForm(props) {
-    // Handle form submission
-    function handleAddTodo(e) {
-        e.preventDefault(); // Prevent the default form submission behavior
-        const todoTitle = e.target.elements.todoTitle.value; // Get the value of the todo title input
-        console.log(todoTitle); // Log the todo title value
-        e.target.reset(); // Reset the form so the text input is cleared
-        props.onAddTodo(todoTitle); // Invoke the onAddTodo callback prop with the todo title value
-    }
-          // Render the form for adding a todo
-        return (
-            <div>
-                <form onSubmit={handleAddTodo}>
-                    <label htmlFor='todoTitle'>Title</label>
-                    <input id='todoTitle' name="title"/> {/* Add name attribute */}
-                    <button type="submit">Add</button>
-                </form>
-            </div>
-        )
-    }
-    export default AddTodoForm
+function AddTodoForm({ onAddTodo }) { // Destructure props
+  const [todoTitle, setTodoTitle] = useState(''); // Create new state variable todoTitle
 
+  // Handle form submission
+  function handleAddTodoFormSubmit(e) {
+    e.preventDefault();
+    const newTodo = {
+      title: todoTitle,
+      id: Date.now(), // Generate unique identifier
+    };
+    onAddTodo(newTodo); // Pass the newTodo object to the onAddTodo callback prop
+    setTodoTitle(''); // Reset todoTitle state to an empty string
+  }
 
+  // Handle input change
+  function handleTitleChange(e) {
+    const newTodoTitle = e.target.value;
+    setTodoTitle(newTodoTitle); // Update todoTitle state
+  }
+
+  return (
+    <div>
+      <form onSubmit={handleAddTodoFormSubmit}>
+        <label htmlFor='todoTitle'>Title</label>
+        <input
+          id='todoTitle'
+          name='title'
+          value={todoTitle} // Use todoTitle state as the value
+          onChange={handleTitleChange} // Handle input change
+        />
+        <button type='submit'>Add</button>
+      </form>
+    </div>
+  );
+}
+
+export default AddTodoForm;
