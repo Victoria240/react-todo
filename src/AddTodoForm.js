@@ -20,12 +20,13 @@ function AddTodoForm({ onAddTodo }) { // Destructure props
   function handleTitleChange(e) {  
     const newTodoTitle = e.target.value;
     setTodoTitle(newTodoTitle); // Update todoTitle state
+    
   }
 
   return (
     <div>
       <form onSubmit={handleAddTodoFormSubmit}>
-        <InputWithLabel handleTitleChange={handleTitleChange}>
+        <InputWithLabel value={todoTitle} onChange={handleTitleChange}>
         </InputWithLabel>
         <button type='submit'>Add</button>
       </form>
