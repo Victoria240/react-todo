@@ -18,6 +18,13 @@ function useSemiPersistentState() {  //custom hook to store and retrieve the tod
 
 function App() {
    
+  function removeTodo(id) {
+    // Filter the todoList array to exclude the todo item with the specified id
+    const updatedTodoList = todoList.filter((todo) => todo.id !== id);
+
+    // Update the todoList state with the new array of todos
+    setTodoList(updatedTodoList);
+  }
 
   const [todoList, setTodoList] = useSemiPersistentState(); // use custom hook
 
@@ -30,7 +37,7 @@ function App() {
     <>
       <h1>Todo List</h1>
       <AddTodoForm onAddTodo={addTodo} /> {/* Update onAddTodo prop */}
-      <TodoList todoList={todoList} /> {/* Pass todoList state as a prop */}
+      <TodoList todoList={todoList} onRemoveTodo = {removeTodo} /> {/* Pass todoList state as a prop */}
      
     </>
   );
