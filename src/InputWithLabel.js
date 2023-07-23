@@ -6,7 +6,7 @@ function InputWithLabel({ children, value, onChange}) {
     useEffect(() => {
          // Accessing the input element and focusing it
         inputRef.current.focus();
-    }, []);
+    });
     
 
     
