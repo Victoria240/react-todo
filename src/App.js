@@ -3,78 +3,103 @@ import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [todoList, setTodoList] = useState([]);
+  // Define states for the list of todos and loading state
+  const [todoList, setTodoList] = useState([]); // Initialize todoList state with an empty array
+  const [isLoading, setIsLoading] = useState(true); // Initialize isLoading state as true
+  const [appState, setAppState] = useState ('')
 
-  // Async function to fetch data from Airtable API
-  const fetchData = async () => {
+  async function fetchData() {
+    // Define options for the API request
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
+      },
+    };
+
+    // Construct the URL for the API
+    const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
+
     try {
-      // Options for the fetch request
-      const options = {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
-        },
-      };
-
-      // Construct the API URL
-      const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
-
-      // Fetch data from API
+      // Fetch data from the API using the constructed URL and options
       const response = await fetch(url, options);
 
-      // Check if response is OK
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
 
-      // Parse the response data
       const data = await response.json();
 
-      // Transform data.records into an array of todos
+      // Transform API data.records into todo objects
       const todos = data.records.map((record) => ({
-        title: record.fields.title,
         id: record.id,
+        title: record.fields.title,
       }));
 
-      // Set the todo list and indicate loading is complete
+      // Update the todoList state with fetched todos
       setTodoList(todos);
-      setIsLoading(false);
+      setIsLoading(false); // Set isLoading to false after data fetch
+
     } catch (error) {
-      console.log(`Fetch error: ${error.message}`);
-      setIsLoading(false);
+      console.error('Error fetching data:', error.message);
     }
-  };
+  }
 
   // Fetch data when the component mounts
   useEffect(() => {
     fetchData();
   }, []);
 
-  // Other functions for handling todos
+  async function handleAddTodo(newTodo) {
+    try {
+      // Construct URL for POST request to add a new todo
+      const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
 
-  // Add a new todo to the todoList
-  const addTodo = (newTodo) => {
-    setTodoList([...todoList, newTodo]);
-  };
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          records: [{ fields: { title: newTodo.title } }],
+        }),
+      });
 
-  // Remove a todo from the todoList
-  const removeTodo = (id) => {
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      // Update the entire state object
+      setAppState({
+        todoList: [...appState.todoList, { id: data.id, title: newTodo.title }],
+        isLoading: false,
+      });
+
+
+    } catch (error) {
+      console.error('Error adding todo:', error.message);
+    }
+  }
+
+  // Function to remove a todo by ID
+  function removeTodo(id) {
     const updatedTodoList = todoList.filter((todo) => todo.id !== id);
     setTodoList(updatedTodoList);
-  };
-
+  }
 
   return (
     <>
-
+      <h1>Todo List</h1>
+      {/* Pass the handleAddTodo function to the AddTodoForm component */}
+      <AddTodoForm onAddTodo={handleAddTodo} />
+      {/* Conditional rendering based on isLoading state */}
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <>
-          <AddTodoForm onAddTodo={addTodo} />
-          <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
-        </>
+        // Pass the todoList and removeTodo function to the TodoList component
+        <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
       )}
     </>
   );
