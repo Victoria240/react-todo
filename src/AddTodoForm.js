@@ -17,10 +17,10 @@ function AddTodoForm({ onAddTodo }) { // Destructure props
   }
 
   // Handle input change
-  function handleTitleChange(e) {  
+  function handleTitleChange(e) {
     const newTodoTitle = e.target.value;
     setTodoTitle(newTodoTitle); // Update todoTitle state
-    
+
   }
 
   return (

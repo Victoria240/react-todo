@@ -1,64 +1,83 @@
-// App.js
 import React, { useEffect, useState } from 'react';
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
 
-
 function App() {
-
-  const [todoList, setTodoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [todoList, setTodoList] = useState([]);
 
+  // Async function to fetch data from Airtable API
+  const fetchData = async () => {
+    try {
+      // Options for the fetch request
+      const options = {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
+        },
+      };
 
+      // Construct the API URL
+      const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
 
-  useEffect(() => {
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve({
-          data: {
-            todoList: JSON.parse(localStorage.getItem("savedTodoList")) || [], // Set todoList property with data from localStorage
-          }
-        });
-      }, 2000); // Delay of 2000 milliseconds (2 seconds)
-    }).then((result) => {
-      setTodoList(result.data.todoList); // Update the todoList state with the fetched data
-      setIsLoading(false); // Turn off loading indicator
-    });
-  }, []); // Empty dependency array, so this effect runs once after initial render
+      // Fetch data from API
+      const response = await fetch(url, options);
 
-
-    useEffect(() => {
-      if (!isLoading) {
-        localStorage.setItem('savedTodoList', JSON.stringify(todoList)); //save the todoList as a string in the localStorage whenever it changes 
+      // Check if response is OK
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
       }
-    }, [todoList, isLoading]); // execute/call the callback function(effect) only when the 'todoList' state variable changes by specifying 'todoList' as the dependency array
 
+      // Parse the response data
+      const data = await response.json();
 
+      // Transform data.records into an array of todos
+      const todos = data.records.map((record) => ({
+        title: record.fields.title,
+        id: record.id,
+      }));
 
-
-    function removeTodo(id) {
-      // Filter the todoList array to exclude the todo item with the specified id
-      const updatedTodoList = todoList.filter((todo) => todo.id !== id);
-
-      // Update the todoList state with the new array of todos
-      setTodoList(updatedTodoList);
+      // Set the todo list and indicate loading is complete
+      setTodoList(todos);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(`Fetch error: ${error.message}`);
+      setIsLoading(false);
     }
+  };
 
-    // const [todoList, setTodoList] = useSemiPersistentState(); // use custom hook
+  // Fetch data when the component mounts
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-    // Handle adding a new todo
-    function addTodo(newTodo) {
-      setTodoList([...todoList, newTodo]); // Update todoList state by adding the new todo
-    }
+  // Other functions for handling todos
 
-    return (
-      <>
-        {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
-        <AddTodoForm onAddTodo={addTodo} />
-        
+  // Add a new todo to the todoList
+  const addTodo = (newTodo) => {
+    setTodoList([...todoList, newTodo]);
+  };
 
-      </>
-    );
-  }
+  // Remove a todo from the todoList
+  const removeTodo = (id) => {
+    const updatedTodoList = todoList.filter((todo) => todo.id !== id);
+    setTodoList(updatedTodoList);
+  };
+
+
+  return (
+    <>
+
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <AddTodoForm onAddTodo={addTodo} />
+          <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+        </>
+      )}
+    </>
+  );
+}
 
 export default App;
