@@ -3,44 +3,61 @@ import React, { useEffect, useState } from 'react';
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
 
-function useSemiPersistentState() {  //custom hook to store and retrieve the todoList in the localStorage
-  const [todoList, setTodoList] = useState( //  use the useState hook to create a state variable todoList and its corresponding setter function setTodoList
-    JSON.parse(localStorage.getItem("savedTodoList")) || [] // initialize the todoList state variable with the value obtained from the "savedTodoList" (key) item in the localStorage.  If there is no item or the value is null(unable to parse), set it to an empty array [].   
-  );
-
-  useEffect(() => {
-    localStorage.setItem("savedTodoList", JSON.stringify(todoList)); //save the todoList as a string in the localStorage whenever it changes 
-  }, [todoList]); // execute/call the callback function(effect) only when the 'todoList' state variable changes by specifying 'todoList' as the dependency array
-
-  return [todoList, setTodoList]; //allows components that use the useSemiPersistentState hook to access and modify the todoList state with automatic synchronization to the localStorage
-}
-
 
 function App() {
-   
-  function removeTodo(id) {
-    // Filter the todoList array to exclude the todo item with the specified id
-    const updatedTodoList = todoList.filter((todo) => todo.id !== id);
 
-    // Update the todoList state with the new array of todos
-    setTodoList(updatedTodoList);
+  const [todoList, setTodoList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+
+
+  useEffect(() => {
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({
+          data: {
+            todoList: JSON.parse(localStorage.getItem("savedTodoList")) || [], // Set todoList property with data from localStorage
+          }
+        });
+      }, 2000); // Delay of 2000 milliseconds (2 seconds)
+    }).then((result) => {
+      setTodoList(result.data.todoList); // Update the todoList state with the fetched data
+      setIsLoading(false); // Turn off loading indicator
+    });
+  }, []); // Empty dependency array, so this effect runs once after initial render
+
+
+    useEffect(() => {
+      if (!isLoading) {
+        localStorage.setItem('savedTodoList', JSON.stringify(todoList)); //save the todoList as a string in the localStorage whenever it changes 
+      }
+    }, [todoList, isLoading]); // execute/call the callback function(effect) only when the 'todoList' state variable changes by specifying 'todoList' as the dependency array
+
+
+
+
+    function removeTodo(id) {
+      // Filter the todoList array to exclude the todo item with the specified id
+      const updatedTodoList = todoList.filter((todo) => todo.id !== id);
+
+      // Update the todoList state with the new array of todos
+      setTodoList(updatedTodoList);
+    }
+
+
+    // Handle adding a new todo
+    function addTodo(newTodo) {
+      setTodoList([...todoList, newTodo]); // Update todoList state by adding the new todo
+    }
+
+    return (
+      <>
+        <AddTodoForm onAddTodo={addTodo} />
+        {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
+        
+
+      </>
+    );
   }
-
-  const [todoList, setTodoList] = useSemiPersistentState(); // use custom hook
-
-  // Handle adding a new todo
-  function addTodo(newTodo) {
-    setTodoList([...todoList, newTodo]); // Update todoList state by adding the new todo
-  }
-
-  return (
-    <>
-      <h1>Todo List</h1>
-      <AddTodoForm onAddTodo={addTodo} /> {/* Update onAddTodo prop */}
-      <TodoList todoList={todoList} onRemoveTodo = {removeTodo} /> {/* Pass todoList state as a prop */}
-     
-    </>
-  );
-}
 
 export default App;
