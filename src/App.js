@@ -44,7 +44,6 @@ function App() {
       setTodoList(updatedTodoList);
     }
 
-    // const [todoList, setTodoList] = useSemiPersistentState(); // use custom hook
 
     // Handle adding a new todo
     function addTodo(newTodo) {
