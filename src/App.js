@@ -82,11 +82,6 @@ function App() {
       console.error('Error adding todo:', error.message);
     }
   }
-
-  // Function to remove a todo by ID
-  function removeTodo(id) {
-    const updatedTodoList = todoList.filter((todo) => todo.id !== id);
-    setTodoList(updatedTodoList);
   }
 
   return (
