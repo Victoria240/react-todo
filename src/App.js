@@ -83,26 +83,28 @@ function App() {
     }
   }
 
-  // Function to remove a todo by ID
-  function removeTodo(id) {
-    const updatedTodoList = todoList.filter((todo) => todo.id !== id);
-    setTodoList(updatedTodoList);
-  }
+    function removeTodo(id) {
+      // Filter the todoList array to exclude the todo item with the specified id
+      const updatedTodoList = todoList.filter((todo) => todo.id !== id);
 
-  return (
-    <>
-      <h1>Todo List</h1>
-      {/* Pass the handleAddTodo function to the AddTodoForm component */}
-      <AddTodoForm onAddTodo={handleAddTodo} />
-      {/* Conditional rendering based on isLoading state */}
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        // Pass the todoList and removeTodo function to the TodoList component
-        <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
-      )}
-    </>
-  );
-}
+      // Update the todoList state with the new array of todos
+      setTodoList(updatedTodoList);
+    }
+
+
+    // Handle adding a new todo
+    function addTodo(newTodo) {
+      setTodoList([...todoList, newTodo]); // Update todoList state by adding the new todo
+    }
+
+    return (
+      <>
+        <AddTodoForm onAddTodo={addTodo} />
+        {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
+        
+
+      </>
+    );
+  }
 
 export default App;
