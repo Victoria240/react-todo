@@ -11,6 +11,7 @@ function App() {
   });
 
   async function fetchData() {
+    // Define options for the API request
     const options = {
       method: 'GET',
       headers: {
@@ -21,6 +22,7 @@ function App() {
     const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
 
     try {
+      // Fetch data from the API using the constructed URL and options
       const response = await fetch(url, options);
 
       if (!response.ok) {
@@ -29,11 +31,13 @@ function App() {
 
       const data = await response.json();
 
+      // Transform API data.records into todo objects
       const todos = data.records.map((record) => ({
         id: record.id,
         title: record.fields.title,
       }));
 
+      // Update the appState with fetched todos
       setAppState({
         ...appState,
         todoList: todos,
@@ -45,12 +49,14 @@ function App() {
     }
   }
 
+  // Fetch data when the component mounts
   useEffect(() => {
     fetchData();
-  }); // No need to add fetchData to dependency array
+  }, []); // Empty dependency array, fetch data only on component mount
 
   async function handleAddTodo(newTodo) {
     try {
+      // Construct URL for POST request to add a new todo
       const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
 
       const response = await fetch(url, {
@@ -70,6 +76,7 @@ function App() {
 
       const data = await response.json();
 
+      // Update appState with the new todo
       setAppState({
         ...appState,
         todoList: [...appState.todoList, { id: data.id, title: newTodo.title }],
@@ -81,7 +88,9 @@ function App() {
   }
 
   function removeTodo(id) {
+    // Filter out the todo with the given id
     const updatedTodoList = appState.todoList.filter((todo) => todo.id !== id);
+    // Update appState with the filtered todoList
     setAppState({
       ...appState,
       todoList: updatedTodoList,
@@ -95,7 +104,6 @@ function App() {
         <Route
           path="/"
           element={
-            /* Render the TodoList component with props */
             <TodoList
               todoList={appState.todoList} // Pass the todoList state as a prop
               onRemoveTodo={removeTodo}    // Pass the removeTodo function as a prop
@@ -106,14 +114,12 @@ function App() {
         <Route
           path="/new"
           element={
-            /* Render the AddTodoForm component with props */
             <AddTodoForm onAddTodo={handleAddTodo} /> // Pass the handleAddTodo function as a prop
           }
         />
       </Routes>
     </BrowserRouter>
   );
-
 }
 
 export default App;
