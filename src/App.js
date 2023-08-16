@@ -87,14 +87,6 @@ function App() {
     }
   }
 
-  function removeTodo(id) {
-    // Filter out the todo with the given id
-    const updatedTodoList = appState.todoList.filter((todo) => todo.id !== id);
-    // Update appState with the filtered todoList
-    setAppState({
-      ...appState,
-      todoList: updatedTodoList,
-    });
   }
 
   return (
