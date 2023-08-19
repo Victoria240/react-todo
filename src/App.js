@@ -3,15 +3,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
 
-function App() {
-  // Define the initial app state
-  const [appState, setAppState] = useState({
-    todoList: [],
-    isLoading: true,
-  });
 
+function App() {
+  const [todoList, setTodoList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+
+  // New async function to fetch data from the API
   async function fetchData() {
-    // Define options for the API request
     const options = {
       method: 'GET',
       headers: {
@@ -19,17 +18,27 @@ function App() {
       },
     };
 
+
+    // Construct the URL for the API
     const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
 
+
     try {
-      // Fetch data from the API using the constructed URL and options
       const response = await fetch(url, options);
+
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
 
+
+      // Parse the response JSON
       const data = await response.json();
+
+
+      // Print the fetched data to observe Airtable's API response
+      console.log('Fetched data:', data);
+
 
       // Transform API data.records into todo objects
       const todos = data.records.map((record) => ({
@@ -37,27 +46,34 @@ function App() {
         title: record.fields.title,
       }));
 
-      // Update the appState with fetched todos
-      setAppState({
-        ...appState,
-        todoList: todos,
-        isLoading: false,
-      });
 
+      // Update todoList and isLoading states
+      setTodoList(todos);
+      setIsLoading(false);
     } catch (error) {
-      console.error('Error fetching data:', error.message);
+      console.log(`Fetch error: ${error.message}`);
     }
   }
 
-  // Fetch data when the component mounts
+
   useEffect(() => {
     fetchData();
-  }, []); // Empty dependency array, fetch data only on component mount
+  }, []);
 
+
+  // Use useEffect to manage localStorage and persist todoList
+  useEffect(() => {
+    if (!isLoading) {
+      localStorage.setItem('savedTodoList', JSON.stringify(todoList)); // Save the todoList in localStorage when it changes
+    }
+  }, [todoList, isLoading]);
+
+
+  // Handle adding a new todo
   async function handleAddTodo(newTodo) {
     try {
-      // Construct URL for POST request to add a new todo
       const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
+
 
       const response = await fetch(url, {
         method: 'POST',
@@ -70,56 +86,67 @@ function App() {
         }),
       });
 
+
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
 
+
       const data = await response.json();
 
-      // Update appState with the new todo
-      setAppState({
-        ...appState,
-        todoList: [...appState.todoList, { id: data.id, title: newTodo.title }],
-      });
 
+      // Update the todoList state by adding the new todo
+      setTodoList([...todoList, { id: data.id, title: newTodo.title }]);
     } catch (error) {
       console.error('Error adding todo:', error.message);
     }
   }
 
+
+  // Use useEffect to simulate loading state and fetch data from localStorage with a 2 seconds delay
+  useEffect(() => {
+    setTimeout(() => {
+      const savedTodoList = JSON.parse(localStorage.getItem("savedTodoList")) || [];
+      setTodoList(savedTodoList);
+      setIsLoading(false);
+    }, 2000);
+  }, []); // Empty dependency array, so this effect runs once after initial render
+
+
+
+
+  // Define the removeTodo function to remove a todo item
   function removeTodo(id) {
-    // Filter out the todo with the given id
-    const updatedTodoList = appState.todoList.filter((todo) => todo.id !== id);
-    // Update appState with the filtered todoList
-    setAppState({
-      ...appState,
-      todoList: updatedTodoList,
-    });
+    // Filter the todoList array to exclude the todo item with the specified id
+    const updatedTodoList = todoList.filter((todo) => todo.id !== id);
+
+
+    // Update the todoList state with the new array of todos
+    setTodoList(updatedTodoList);
   }
 
-  return (
-    <BrowserRouter>
-      <Routes>
-        {/* Define a Route for the root path ("/") */}
-        <Route
-          path="/"
-          element={
-            <TodoList
-              todoList={appState.todoList} // Pass the todoList state as a prop
-              onRemoveTodo={removeTodo}    // Pass the removeTodo function as a prop
-            />
-          }
-        />
-        {/* Define a Route for the "/new" path */}
-        <Route
-          path="/new"
-          element={
-            <AddTodoForm onAddTodo={handleAddTodo} /> // Pass the handleAddTodo function as a prop
-          }
-        />
-      </Routes>
-    </BrowserRouter>
-  );
+
+ return (
+  <BrowserRouter>
+    <Routes>
+      {/* Define a Route for the root path ("/") */}
+      <Route
+        path="/"
+        element={
+          <AddTodoForm onAddTodo={handleAddTodo} /> // Render the AddTodoForm component with the handleAddTodo function
+        }
+      />
+      {/* Define a Route for the "/new" path */}
+      <Route
+        path="/new"
+        element={
+          isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} /> // Render either loading indicator or the TodoList component
+        }
+      />
+    </Routes>
+  </BrowserRouter>
+);
 }
+
 
 export default App;
