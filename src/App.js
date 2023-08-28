@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
 
@@ -61,12 +60,7 @@ function App() {
   }, []);
 
 
-  // Use useEffect to manage localStorage and persist todoList
-  useEffect(() => {
-    if (!isLoading) {
-      localStorage.setItem('savedTodoList', JSON.stringify(todoList)); // Save the todoList in localStorage when it changes
-    }
-  }, [todoList, isLoading]);
+ 
 
 
   // Handle adding a new todo
@@ -91,29 +85,14 @@ function App() {
         throw new Error(`Error: ${response.status}`);
       }
 
-
       const data = await response.json();
-
       const confirmedTodo = data.records[0];
-
       // Update the todoList state by adding the new todo
       setTodoList([...todoList, { id: confirmedTodo.id, title: confirmedTodo.fields.title }]);
     } catch (error) {
       console.error('Error adding todo:', error.message);
     }
   }
-
-
-  // Use useEffect to simulate loading state and fetch data from localStorage with a 2 seconds delay
-  useEffect(() => {
-    setTimeout(() => {
-      const savedTodoList = JSON.parse(localStorage.getItem("savedTodoList")) || [];
-      setTodoList(savedTodoList);
-      setIsLoading(false);
-    }, 2000);
-  }, []); // Empty dependency array, so this effect runs once after initial render
-
-
 
 
   // Define the removeTodo function to remove a todo item
@@ -128,30 +107,14 @@ function App() {
 
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Define a Route for the root path ("/") */}
-        <Route
-          path="/"
-          element={
-            <AddTodoForm onAddTodo={handleAddTodo} /> // Render the AddTodoForm component with the handleAddTodo function
-          }
-        />
-        {/* Define a Route for the "/new" path */}
-        <Route
-          path="/new"
-          element={
-            isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} /> // Render either loading indicator or the TodoList component
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    <>
+      {/* Render the AddTodoForm component with the handleAddTodo function */}
+      <AddTodoForm onAddTodo={handleAddTodo} />
+      {/* Render either loading indicator or the TodoList component */}
+      {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
+    </>
   );
-
 }
 
 
 export default App;
-
-
-
