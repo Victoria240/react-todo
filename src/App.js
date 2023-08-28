@@ -94,9 +94,10 @@ function App() {
 
       const data = await response.json();
 
+      const confirmedTodo = data.records[0];
 
       // Update the todoList state by adding the new todo
-      setTodoList([...todoList, { id: data.id, title: newTodo.title }]);
+      setTodoList([...todoList, { id: confirmedTodo.id, title: confirmedTodo.fields.title }]);
     } catch (error) {
       console.error('Error adding todo:', error.message);
     }
