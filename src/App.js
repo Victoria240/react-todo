@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import style from './App.module.css';
-
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Import BrowserRouter, Routes, and Route
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
-import NavLayout from './NavLayout'; // Import the Layout component
-
+import NavLayout from './NavLayout';
 
 function App() {
   // State to hold the list of todos and loading status
@@ -29,8 +27,8 @@ function App() {
       const response = await fetch(url, options);
 
       if (!response.ok) {
-        console.log('Airtable error response:')
-        console.log(response)
+        console.log('Airtable error response:');
+        console.log(response);
         throw new Error(`Error: ${response.status}`);
       }
 
@@ -95,33 +93,23 @@ function App() {
     setTodoList(updatedTodoList);
   }
 
-
   return (
     <BrowserRouter className={style.App}>
-      <NavLayout> {/* Use the Layout component */}
+      <NavLayout>
         <Routes>
-          {/* Define a Route for the root path ("/") */}
           <Route
             path="/"
             element={
-
-
-              isLoading ? <p>Loading...</p> :
-                <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
-              /*Render either loading indicator or the TodoList component*/
-
-
+              isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
             }
           />
-          {/* Define a Route for the "/new" path */}
           <Route
             path="/new"
             element={
               <div className={style.NewTodoContainer}>
                 <div className={style.NewTodo}>
-                  {<h1 className={style.ListHeader}> New Todo List</h1>}
-                  {<AddTodoForm onAddTodo={handleAddTodo} />} {/*Render the AddTodoForm component with the handleAddTodo function*/}
-
+                  <h1 className={style.ListHeader}>New Todo List</h1>
+                  <AddTodoForm onAddTodo={handleAddTodo} />
                 </div>
               </div>
             }
@@ -131,6 +119,5 @@ function App() {
     </BrowserRouter>
   );
 }
-
 
 export default App;
