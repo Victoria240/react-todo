@@ -56,7 +56,7 @@ button {
     height: 100vh;
 }
 .NewTodo {
-    background-color: white;
+    background-color: none;
         color: black;
         padding: 40px;
         width: 500px;
