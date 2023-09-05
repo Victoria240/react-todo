@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import style from './App.module.css';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Import BrowserRouter, Routes, and Route
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
+import NavLayout from './NavLayout'; // Import the Layout component
+
 
 function App() {
   // State to hold the list of todos and loading status
@@ -25,6 +29,8 @@ function App() {
       const response = await fetch(url, options);
 
       if (!response.ok) {
+        console.log('Airtable error response:')
+        console.log(response)
         throw new Error(`Error: ${response.status}`);
       }
 
@@ -91,32 +97,38 @@ function App() {
 
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Define a Route for the root path ("/") */}
-        <Route
-          path="/"
-          element={
-            
+    <BrowserRouter className={style.App}>
+      <NavLayout> {/* Use the Layout component */}
+        <Routes>
+          {/* Define a Route for the root path ("/") */}
+          <Route
+            path="/"
+            element={
 
-              isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} /> /*Render either loading indicator or the TodoList component*/
 
-  
-          }
-        />
-        {/* Define a Route for the "/new" path */}
-        <Route
-          path="/new"
-          element={
-            <>
-              {< h1 > New Todo List</h1>}
-              {<AddTodoForm onAddTodo={handleAddTodo} />} {/*Render the AddTodoForm component with the handleAddTodo function*/}
-             
-            </>
-          }
-        />
-    </Routes>
-    </BrowserRouter >
+              isLoading ? <p>Loading...</p> :
+                <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+              /*Render either loading indicator or the TodoList component*/
+
+
+            }
+          />
+          {/* Define a Route for the "/new" path */}
+          <Route
+            path="/new"
+            element={
+              <div className={style.NewTodoContainer}>
+                <div className={style.NewTodo}>
+                  {<h1 className={style.ListHeader}> New Todo List</h1>}
+                  {<AddTodoForm onAddTodo={handleAddTodo} />} {/*Render the AddTodoForm component with the handleAddTodo function*/}
+
+                </div>
+              </div>
+            }
+          />
+        </Routes>
+      </NavLayout>
+    </BrowserRouter>
   );
 }
 

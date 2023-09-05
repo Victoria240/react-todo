@@ -1,0 +1,31 @@
+/* Checkbox.module.css */
+
+.Checkbox {
+    position: relative;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #333;
+    background-color: #fff;
+    margin-right: 8px;
+}
+
+.Checkbox input[type='checkbox'] {
+    display: none;
+}
+
+.Checkbox::before {
+    content: '\2713';
+    /* Unicode checkmark symbol */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    color: transparent;
+}
+
+.Checkbox input[type='checkbox']:checked+.Checkbox::before {
+    color: #01BAD7;
+    /* Change the color when checked */
+}

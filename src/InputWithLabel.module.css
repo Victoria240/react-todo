@@ -1,0 +1,12 @@
+.InputWithLabel input {
+    height: 16px;
+    width: 360px;
+    /* Modify the height of the search bar */
+    padding: 8px;
+    /* Add padding for better appearance */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    flex-grow: 1;
+    
+}

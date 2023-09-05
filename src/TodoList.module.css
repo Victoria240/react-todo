@@ -1,0 +1,57 @@
+/* TodoList.module.css */
+.TodoListContainer {
+    display: flex;
+    flex-direction: column;
+    /* Center items vertically */
+    align-items: center;
+    margin: 40px 0;
+   
+   
+}
+
+.TodoList {
+    background-color: none;
+    color:white;
+    padding: 40px;
+    width: 500px;
+    border-radius: 16px;
+    height: 60vh;
+        /* Set the height to 60% of the viewport */
+    overflow: auto;
+    padding-bottom: 24px;  
+}
+
+.ListHeader {
+    margin: 0;
+    /* Reset the margin to remove any unwanted spacing */
+    font-size: 24px;
+    /* Adjust the font size */
+    text-align: center;
+    /* Center-align the text */
+}
+
+
+.List {
+    display: flex;
+    flex-direction: column;
+    /* Align items vertically */
+    padding: 0;
+   /* Reset default padding for <ul> */ 
+    overflow: hidden;
+}
+
+/* Style the scrollbar */
+.TodoList::-webkit-scrollbar {
+    width: 12px;
+}
+
+.TodoList::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    margin: 16px 0;
+    border-radius: 16px;
+}
+
+.TodoList::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 6px;
+}
