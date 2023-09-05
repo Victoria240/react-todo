@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Import BrowserRouter, Routes, and Route
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
 
-
 function App() {
+  // State to hold the list of todos and loading status
   const [todoList, setTodoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // New async function to fetch data from the API
+  async function fetchData() {
+    // Define options for the API request
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
+      },
+    };
 
   // New async function to fetch data from the API
   async function fetchData() {
@@ -35,15 +45,13 @@ function App() {
       const data = await response.json();
 
 
-      // Print the fetched data to observe Airtable's API response
-      console.log('Fetched data:', data);
-
-
+      
       // Transform API data.records into todo objects
       const todos = data.records.map((record) => ({
         id: record.id,
         title: record.fields.title,
       }));
+
 
 
       // Update todoList and isLoading states
@@ -55,19 +63,15 @@ function App() {
   }
 
 
+  // Fetch data on initial render
   useEffect(() => {
     fetchData();
   }, []);
-
-
- 
-
 
   // Handle adding a new todo
   async function handleAddTodo(newTodo) {
     try {
       const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
-
 
       const response = await fetch(url, {
         method: 'POST',
@@ -80,13 +84,13 @@ function App() {
         }),
       });
 
-
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
 
       const data = await response.json();
       const confirmedTodo = data.records[0];
+
       // Update the todoList state by adding the new todo
       setTodoList([...todoList, { id: confirmedTodo.id, title: confirmedTodo.fields.title }]);
     } catch (error) {
@@ -107,12 +111,33 @@ function App() {
 
 
   return (
-    <>
-      {/* Render the AddTodoForm component with the handleAddTodo function */}
-      <AddTodoForm onAddTodo={handleAddTodo} />
-      {/* Render either loading indicator or the TodoList component */}
-      {isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} />}
-    </>
+    <BrowserRouter>
+      <Routes>
+        {/* Define a Route for the root path ("/") */}
+        <Route
+          path="/"
+          element={
+            
+
+              isLoading ? <p>Loading...</p> : <TodoList todoList={todoList} onRemoveTodo={removeTodo} /> /*Render either loading indicator or the TodoList component*/
+
+  
+          }
+        />
+        {/* Define a Route for the "/new" path */}
+        <Route
+          path="/new"
+          element={
+            <>
+              {< h1 > New Todo List</h1>}
+              {<AddTodoForm onAddTodo={handleAddTodo} />} {/*Render the AddTodoForm component with the handleAddTodo function*/}
+             
+            </>
+          }
+        />
+    </Routes>
+    </BrowserRouter >
+
   );
 }
 
