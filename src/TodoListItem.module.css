@@ -11,22 +11,16 @@
     padding: 16px 16px;
         /* Add top and bottom padding */
     border-bottom: 1px solid #E1E2E5; /* Add a divider line under each item */
+    border-left: 4px solid #01BAD7;
+    border-radius: 4px;
+    
 
     /* Add a 4px colored rectangle to the left */
     position: relative;  
     margin-bottom: 16px;  
 }
 
-.ListItem::before {
-    content: '';
-    width: 4px;
-    height: 100%;
-    background-color: #01BAD7;
-    /* Color of the rectangle */
-    position: absolute;
-    border-radius: 4px;
-    left: 0;
-}
+
 
 .ListItem input[type="checkbox"] {
     margin-right: 10px;

@@ -10,7 +10,7 @@
 }
 
 .TodoList {
-    background-color: none;
+   
     color:white;
     padding: 40px;
     width: 500px;
@@ -54,4 +54,31 @@
 .TodoList::-webkit-scrollbar-thumb {
     background: #ccc;
     border-radius: 6px;
+}
+
+
+/* media queries for responsiveness */
+@media screen and (max-width: 768px) {
+    .TodoListContainer {
+            display: flex;
+            flex-direction: column;
+            /* Center items vertically */
+            align-items: center;
+            margin: 40px 0;
+    
+    
+        }
+    
+        .TodoList {
+           
+            color: white;
+            padding: 40px;
+            width:auto;
+            border-radius: 16px;
+            height: 60vh;
+            /* Set the height to 60% of the viewport */
+            overflow: auto;
+            padding-bottom: 24px;
+        }
+
 }
