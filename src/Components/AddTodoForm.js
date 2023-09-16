@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import InputWithLabel from './InputWithLabel';
 import styles from './AddTodoForm.module.css';
+import PropTypes from 'prop-types'; // Import PropTypes
+
 
 function AddTodoForm({ onAddTodo }) { // Destructure props
   const [todoTitle, setTodoTitle] = useState(''); // Create new state variable todoTitle
@@ -36,5 +38,9 @@ function AddTodoForm({ onAddTodo }) { // Destructure props
     </div>
   );
 }
+// Define PropTypes for the specific props used by this component
+AddTodoForm.propTypes = {
+  onAddTodo: PropTypes.func,
+};
 
 export default AddTodoForm;

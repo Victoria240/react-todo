@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import style from './TodoListItem.module.css'; // Import the CSS module
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash} from '@fortawesome/free-solid-svg-icons'; 
-
+import PropTypes from 'prop-types'; // Import PropTypes
 
 
 // Define the TodoListItem component
@@ -42,5 +42,11 @@ function TodoListItem({ todo, onRemoveTodo }) {
         </div>
     );
 }
+
+TodoListItem.propTypes = {
+
+    todo: PropTypes.func, // PropTypes for the 'todoList' prop
+    onRemoveTodo: PropTypes.func, // PropTypes for the 'onChange' prop
+};
 
 export default TodoListItem;
