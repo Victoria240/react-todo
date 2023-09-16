@@ -1,6 +1,7 @@
 // AddTodoForm.js
 import React, { useState } from 'react';
 import InputWithLabel from './InputWithLabel';
+import styles from './AddTodoForm.module.css';
 
 function AddTodoForm({ onAddTodo }) { // Destructure props
   const [todoTitle, setTodoTitle] = useState(''); // Create new state variable todoTitle
@@ -24,11 +25,13 @@ function AddTodoForm({ onAddTodo }) { // Destructure props
   }
 
   return (
-    <div>
-      <form onSubmit={handleAddTodoFormSubmit}>
-        <InputWithLabel value={todoTitle} onChange={handleTitleChange}>
-        </InputWithLabel>
-        <button type='submit'>Add</button>
+    <div className={styles.AddTodoFormContainer}>
+      <form onSubmit={handleAddTodoFormSubmit} className={styles.Form}>
+        <InputWithLabel
+          value={todoTitle}
+          onChange={handleTitleChange}
+        />
+        <button type="submit" className={styles.AddButton}>Add</button>
       </form>
     </div>
   );

@@ -1,0 +1,119 @@
+/* App.module.css */
+
+/* Change the background color of the page body */
+body {
+    background-color: #061C3D;
+    height: 100vh;
+    /* Set the height to 100% of the viewport */
+    margin: 0;
+    /* Remove default margin to fill the entire viewport */
+    padding: 0;
+    /* Remove default padding */
+    justify-content: center;
+    text-align: center;
+}
+
+/* Change the default text color */
+body {
+    color: #333;
+}
+
+/* Customize font family */
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+
+
+/* Add spacing */
+.App {
+    padding: 20px;
+}
+
+/* Change font size, weight, and color of the h1 texts */
+h1, p {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Customize input and button styles */
+input[type="text"],
+button {
+    padding: 8px;
+    border: 1px solid #01BAD7;
+    background-color: #01BAD7;
+    color: white;
+    border-radius: 4px;
+}
+
+.NewTodoContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.NewTodo {
+    color: black;
+    padding: 40px;
+    width: 500px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 8vh;
+    overflow: auto;
+
+}
+
+.NewTodo h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.ListHeader {
+    margin: 0;
+    /* Reset the margin to remove any unwanted spacing */
+    font-size: 24px;
+
+    text-align: center;
+
+}
+
+/* media queries for responsiveness */
+@media screen and (max-width: 768px) {
+
+    h1 {
+        font-size: 20px;
+    }
+
+
+    button {
+        /* Hide the button text */
+        text-indent: 90%;
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 8px;
+        border: none;
+        background-color: transparent;
+        color: white;
+
+    }
+
+        .NewTodo {
+            
+            color: black;
+            padding: 16px;
+            width: auto;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 60%;
+            overflow: auto;
+    
+        }
+}

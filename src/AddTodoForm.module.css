@@ -1,0 +1,42 @@
+/* AddTodoForm.module.css */
+
+.AddTodoFormContainer {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    
+
+}
+
+.Form {
+    display: flex;
+    align-items: center;
+    width: auto;
+}
+
+.AddButton {
+    margin-left: 8px;
+    /* Add space between input and button */
+}
+
+
+/* media queries for responsiveness */
+@media screen and (max-width: 768px) {
+    .Form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: auto;
+        gap: 16px;
+    }
+
+    .AddButton {
+        margin-left: 0px;
+        text-indent: 0%;
+        padding: 8px 24px;
+        border: none;
+        background-color: #01BAD7;
+        color: white;
+    }
+
+}

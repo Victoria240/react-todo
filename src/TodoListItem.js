@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
+import style from './TodoListItem.module.css'; // Import the CSS module
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash} from '@fortawesome/free-solid-svg-icons'; 
+
+
 
 // Define the TodoListItem component
 function TodoListItem({ todo, onRemoveTodo }) {
+    const [isChecked, setIsChecked] = useState(false);
+    const handleCheckboxChange = () => {
+        setIsChecked(!isChecked);
+    };
+
+    const listItemStyle = {
+        textDecoration: isChecked ? 'line-through' : 'none',
+    };
+
     // Define a click event handler for the remove button
     const handleRemoveClick = () => {
         // Call the onRemoveTodo callback with the todo id as the argument
@@ -9,10 +23,23 @@ function TodoListItem({ todo, onRemoveTodo }) {
     };
 
     return (
-        <>
-            <li>{todo.title}</li> {/* Render the todo item title */}
-            <button onClick={handleRemoveClick}>Remove</button> {/* Render the remove button */}
-        </>
+        <div>
+            <li className={style.ListItem}>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={handleCheckboxChange}
+                    />
+                </label>
+                <span style={listItemStyle}>{todo.title}</span>
+                
+                <button onClick={handleRemoveClick} style={{ cursor: 'pointer' }}>
+                    <FontAwesomeIcon icon={faTrash} style={{ marginRight: '5px' }} />
+                    Remove
+                </button>
+            </li> {/* Render the todo item title */}
+        </div>
     );
 }
 

@@ -1,0 +1,140 @@
+/* NavLayout.module.css */
+.NavBar {
+    width: 100%;
+    background-color: white;
+    /* Background color for the navbar */
+
+    /* Text color for the links */
+    padding: 24px 0;
+    /* Add some padding for spacing */
+    box-shadow: 0px 4px 6px rgba(201, 115, 115, 0.1);
+
+}
+
+.NavContainer {
+    display: flex;
+    /* Use flexbox */
+    justify-content: flex-end;
+    /* Align items to the far right */
+    align-items: center;
+    /* Center items vertically */
+    max-width: 100%;
+    /* Limit the container width */
+    margin: 0 auto;
+    /* Center the container horizontally */
+
+}
+
+.NavList {
+    list-style-type: none;
+    /* Remove bullet points for list items */
+    margin: 0;
+    /* Remove default margin */
+    padding: 0;
+    /* Remove default padding */
+}
+
+.NavItem {
+    display: inline-block;
+    /* Display list items in a row */
+    margin-left: 20px;
+    /* Add spacing between items */
+}
+
+.NavLink {
+    text-decoration: none;
+    /* Remove underline from links */
+    color: black;
+    /* Set the text color */
+    font-size: 18px;
+    /* Adjust the font size */
+    margin: 0 24px;
+    /* Add margin to create spacing between items */
+}
+
+.NavLink:hover {
+    /* Style for hover effect */
+    color: #00405B;
+    /* Change color on hover */
+}
+
+.NavToggle {
+    display: none;
+    /* Hide the hamburger icon by default on larger screens */
+    cursor: pointer;
+    margin-right: 24px;
+}
+
+.Hamburger {
+    width: 26px;
+    height: 24px;
+    color: black;
+    margin: 4px 0;
+    transition: 0.4s;
+}
+
+.CloseIcon {
+    width: 25px;
+    height: 24px;
+    color: black;
+    margin: 4px 0;
+    transition: 0.4s;
+}
+
+
+/* Media query for screens smaller than a certain width (e.g., 768px) */
+@media screen and (max-width: 768px) {
+    .NavToggle {
+        display: block;
+        /* Show the hamburger icon */
+    }
+
+       
+
+    .NavContainer {
+        display: flex;
+        /* Use flexbox */
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 24px;
+
+        /* Center items vertically */
+        max-width: 100%;
+        /* Limit the container width */
+        margin: 0 auto;
+        /* Center the container horizontally */
+
+    }
+
+    .NavList {
+        display: none;
+        /* Hide the navigation menu by default on smaller screens */
+        align-items: end;
+        position: absolute;
+        /* Position the menu absolutely */
+        top: 60px;
+        /* Adjust the top position as needed */
+        right: 16px;
+        /* Position the menu on the right side */
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 8px;
+        z-index: 1;
+        /* Ensure the menu appears above other content */
+    }
+
+    .NavItem {
+        display: inline-block;
+        /* Display list items in a row */
+        margin-bottom: 24px;
+        /* Add spacing between items */
+    }
+
+    .Visible {
+        display: flex;
+        flex-direction: column;
+
+        /* Show the navigation menu when it's visible */
+    }
+}
