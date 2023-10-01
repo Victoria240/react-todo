@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import style from './TodoListItem.module.css'; // Import the CSS module
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash} from '@fortawesome/free-solid-svg-icons'; 
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types'; // Import PropTypes
 
 
@@ -33,7 +33,7 @@ function TodoListItem({ todo, onRemoveTodo }) {
                     />
                 </label>
                 <span style={listItemStyle}>{todo.title}</span>
-                
+
                 <button onClick={handleRemoveClick} style={{ cursor: 'pointer' }}>
                     <FontAwesomeIcon icon={faTrash} style={{ marginRight: '5px' }} />
                     Remove
@@ -45,7 +45,10 @@ function TodoListItem({ todo, onRemoveTodo }) {
 
 TodoListItem.propTypes = {
 
-    todo: PropTypes.func, // PropTypes for the 'todoList' prop
+    todo: PropTypes.shape({
+        id: PropTypes.string,
+        title: PropTypes.string,
+    }),
     onRemoveTodo: PropTypes.func, // PropTypes for the 'onChange' prop
 };
 

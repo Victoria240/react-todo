@@ -1,14 +1,12 @@
-// TodoContainer.js
 import React, { useEffect, useState, useCallback } from "react";
 import TodoList from "./TodoList";
 
 function TodoContainer() {
-    const [todoList, setTodoList] = useState([]);
+    const [todoList, setTodoList] = useState([{ id: '', title: '', createdTime: '' }]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAscending, setIsAscending] = useState(true); // Track sorting order
 
-    // Memoize the fetchData function using useCallback to ensure a stable reference between renders as long as its dependencies (in this case, isAscending) don't change.
-
+    // Memoize the fetchData function using useCallback to ensure a stable reference
     const fetchData = useCallback(async () => {
         // Define options for the API request
         const options = {
@@ -35,11 +33,13 @@ function TodoContainer() {
 
             // Parse the response JSON
             const data = await response.json();
+            console.log('API Response Data:', data);
 
             // Transform API data.records into todo objects
             const todos = data.records.map((record) => ({
                 id: record.id,
                 title: record.fields.title,
+                createdTime:new Date (record.fields.createdTime),
             }));
 
             // Update todoList and isLoading states
@@ -53,13 +53,27 @@ function TodoContainer() {
     // Fetch data on initial render and whenever sorting order changes
     useEffect(() => {
         fetchData();
+        
     }, [fetchData]);
 
-    // Function to toggle sorting order
+    // Function to toggle sorting order and sort the todoList accordingly
     function toggleSortingOrder() {
         // Toggle between ascending and descending order
         setIsAscending(!isAscending);
+
+        // Sort the todoList based on the new sorting order
+        setTodoList((prevTodoList) =>
+            [...prevTodoList].sort((a, b) => {
+                if (isAscending) {
+                    return a.createdTime < b.createdTime ? -1 : 1;
+                } else {
+                    return a.createdTime > b.createdTime ? -1 : 1;
+                }
+            })
+        );
     }
+
+   
 
     // Define the removeTodo function to remove a todo item
     function removeTodo(id) {
@@ -72,13 +86,16 @@ function TodoContainer() {
 
     return (
         <>
-            <button onClick={toggleSortingOrder}
+            <button
+                onClick={toggleSortingOrder}
                 style={{
-                    margin: "16px",
+                    margin: "16px auto",
                     cursor: "pointer",
+                    alignItems: "center",
+                    textIndent: "0",
+                    backgroundColor: "#01BAD7",
                 }}
             >
-                
                 Toggle Sorting Order: {isAscending ? "Ascending" : "Descending"}
             </button>
             <TodoList todoList={todoList} onRemoveTodo={removeTodo} isLoading={isLoading} />

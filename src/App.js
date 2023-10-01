@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import style from './App.module.css';
 
@@ -9,11 +9,6 @@ import TodoContainer from './Components/TodoContainer';
 
 
 function App() {
-
-  // State to hold the list of todos and loading status
-  const [todoList, setTodoList] = useState([]);
-  
-  
   // Handle adding a new todo
   async function handleAddTodo(newTodo) {
     try {
@@ -34,11 +29,7 @@ function App() {
         throw new Error(`Error: ${response.status}`);
       }
 
-      const data = await response.json();
-      const confirmedTodo = data.records[0];
-
-      // Update the todoList state by adding the new todo
-      setTodoList([...todoList, { id: confirmedTodo.id, title: confirmedTodo.fields.title }]);
+     
     } catch (error) {
       console.error('Error adding todo:', error.message);
     }

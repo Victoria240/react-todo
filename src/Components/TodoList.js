@@ -28,12 +28,12 @@ function TodoList({ todoList, onRemoveTodo }) {
   );
 }
 TodoList.propTypes = {
-    todoList: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.number.isRequired,
-            title: PropTypes.string.isRequired,
-        })
-    ).isRequired,// PropTypes for the 'todoList' prop
+  todoList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      title: PropTypes.string,
+    })
+  ).isRequired,// PropTypes for the 'todoList' prop
   onRemoveTodo: PropTypes.func, // PropTypes for the 'onRemoveTodo' prop
 };
 
