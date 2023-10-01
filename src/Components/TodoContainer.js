@@ -53,8 +53,8 @@ function TodoContainer() {
     // Fetch data on initial render and whenever sorting order changes
     useEffect(() => {
         fetchData();
-        
-    }, [fetchData]);
+        // eslint-disable-next-line 
+    }, []);
 
     // Function to toggle sorting order and sort the todoList accordingly
     function toggleSortingOrder() {
