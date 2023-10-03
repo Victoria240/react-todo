@@ -28,6 +28,7 @@ function TodoListItem({ todo, onRemoveTodo }) {
                 <label>
                     <input
                         type="checkbox"
+                        name={`todoCheckbox-${todo.id}`}
                         checked={isChecked}
                         onChange={handleCheckboxChange}
                     />

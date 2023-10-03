@@ -40,7 +40,7 @@ function TodoContainer() {
             const todos = data.records.map((record) => ({
                 id: record.id,
                 title: record.fields.title,
-                createdTime: new Date(record.fields.createdTime),
+                createdTime: new Date(record.createdTime),
             }));
 
             // Update todoList and isLoading states
