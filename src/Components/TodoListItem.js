@@ -46,8 +46,9 @@ function TodoListItem({ todo, onRemoveTodo }) {
 TodoListItem.propTypes = {
 
     todo: PropTypes.shape({
-        id: PropTypes.string,
-        title: PropTypes.string,
+        id: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        createdTime: PropTypes.instanceOf(Date).isRequired,
     }),
     onRemoveTodo: PropTypes.func, // PropTypes for the 'onChange' prop
 };

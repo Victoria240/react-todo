@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import TodoList from "./TodoList";
+import styles from "./TodoContainer.module.css";
 
 function TodoContainer() {
-    const [todoList, setTodoList] = useState([{ id: '', title: '', createdTime: '' }]);
+    const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAscending, setIsAscending] = useState(true); // Track sorting order
 
@@ -39,7 +40,7 @@ function TodoContainer() {
             const todos = data.records.map((record) => ({
                 id: record.id,
                 title: record.fields.title,
-                createdTime:new Date (record.fields.createdTime),
+                createdTime: new Date(record.fields.createdTime),
             }));
 
             // Update todoList and isLoading states
@@ -54,7 +55,7 @@ function TodoContainer() {
     useEffect(() => {
         fetchData();
         // eslint-disable-next-line 
-    }, []);
+    }, [fetchData]);
 
     // Function to toggle sorting order and sort the todoList accordingly
     function toggleSortingOrder() {
@@ -64,16 +65,12 @@ function TodoContainer() {
         // Sort the todoList based on the new sorting order
         setTodoList((prevTodoList) =>
             [...prevTodoList].sort((a, b) => {
-                if (isAscending) {
-                    return a.createdTime < b.createdTime ? -1 : 1;
-                } else {
-                    return a.createdTime > b.createdTime ? -1 : 1;
-                }
+                return isAscending ? a.createdTime < b.createdTime ? -1 : 1 : a.createdTime > b.createdTime ? -1 : 1;
             })
         );
     }
 
-   
+
 
     // Define the removeTodo function to remove a todo item
     function removeTodo(id) {
@@ -88,13 +85,7 @@ function TodoContainer() {
         <>
             <button
                 onClick={toggleSortingOrder}
-                style={{
-                    margin: "16px auto",
-                    cursor: "pointer",
-                    alignItems: "center",
-                    textIndent: "0",
-                    backgroundColor: "#01BAD7",
-                }}
+                className={styles.ToggleButton}
             >
                 Toggle Sorting Order: {isAscending ? "Ascending" : "Descending"}
             </button>
