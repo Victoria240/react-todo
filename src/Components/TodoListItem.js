@@ -51,7 +51,7 @@ TodoListItem.propTypes = {
         title: PropTypes.string.isRequired,
         createdTime: PropTypes.instanceOf(Date).isRequired,
     }),
-    onRemoveTodo: PropTypes.func, // PropTypes for the 'onChange' prop
+    onRemoveTodo: PropTypes.func.isRequired, // PropTypes for the 'onChange' prop
 };
 
 export default TodoListItem;

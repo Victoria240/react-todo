@@ -55,7 +55,7 @@ function TodoContainer() {
     useEffect(() => {
         fetchData();
         // eslint-disable-next-line 
-    }, [fetchData]);
+    }, []);
 
     // Function to toggle sorting order and sort the todoList accordingly
     function toggleSortingOrder() {
@@ -65,21 +65,48 @@ function TodoContainer() {
         // Sort the todoList based on the new sorting order
         setTodoList((prevTodoList) =>
             [...prevTodoList].sort((a, b) => {
-                return isAscending ? a.createdTime < b.createdTime ? -1 : 1 : a.createdTime > b.createdTime ? -1 : 1;
+                if (isAscending) {
+                    return a.createdTime < b.createdTime ? -1 : 1;
+                } else {
+                    return a.createdTime > b.createdTime ? -1 : 1;
+                }
             })
-        );
+        )
     }
 
 
-
-    // Define the removeTodo function to remove a todo item
     function removeTodo(id) {
-        // Filter the todoList array to exclude the todo item with the specified id
-        const updatedTodoList = todoList.filter((todo) => todo.id !== id);
+        // Construct the URL for the DELETE request
+        const deleteUrl = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}/${id}`;
 
-        // Update the todoList state with the new array of todos
-        setTodoList(updatedTodoList);
+        // Define options for the DELETE request
+        const options = {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
+            },
+        };
+
+        // Send the DELETE request
+        fetch(deleteUrl, options)
+            .then((response) => {
+                if (response.status === 204) {
+                    // Deletion was successful, proceed to update the todoList state
+                    // Filter the todoList to exclude the record with the specified id
+                    const updatedTodoList = todoList.filter((todo) => todo.id !== id);
+                    console.log("Updated Todo List:", updatedTodoList); // Checking if it's correct
+                    // Update the todoList state with the new filtered array
+                    setTodoList(updatedTodoList);
+                } else {
+                    // Handle errors or non-successful responses here
+                    console.error("Failed to delete record:", response.status);
+                }
+            })
+            .catch((error) => {
+                console.error("Delete request error:", error);
+            });
     }
+
 
     return (
         <>
@@ -87,7 +114,7 @@ function TodoContainer() {
                 onClick={toggleSortingOrder}
                 className={styles.ToggleButton}
             >
-                Toggle Sorting Order: {isAscending ? "Ascending" : "Descending"}
+                Toggle Sorting Order: {isAscending ? "Descending" : "Ascending"}
             </button>
             <TodoList todoList={todoList} onRemoveTodo={removeTodo} isLoading={isLoading} />
         </>
