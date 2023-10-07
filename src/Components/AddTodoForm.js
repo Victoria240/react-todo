@@ -12,8 +12,7 @@ function AddTodoForm({ onAddTodo }) { // Destructure props
   function handleAddTodoFormSubmit(e) {
     e.preventDefault();
     const newTodo = {
-      title: todoTitle,
-      id: Date.now(), // Generate unique identifier
+      title: todoTitle
     };
     onAddTodo(newTodo); // Pass the newTodo object to the onAddTodo callback prop
     setTodoTitle(''); // Reset todoTitle state to an empty string

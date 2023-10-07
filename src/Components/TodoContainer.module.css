@@ -1,0 +1,16 @@
+
+  .ToggleButton {
+      text-indent: 0%;
+      white-space: nowrap;
+      padding: 8px;
+      margin: 16px auto;
+      cursor: pointer;
+      border: none;
+      background-color: #01BAD7;
+      color: white;
+      align-items: center;
+
+  }
+
+
+      
