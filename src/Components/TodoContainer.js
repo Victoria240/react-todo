@@ -60,12 +60,14 @@ function TodoContainer() {
     // Function to toggle sorting order and sort the todoList accordingly
     function toggleSortingOrder() {
         // Toggle between ascending and descending order
-        setIsAscending(!isAscending);
+        const nextIsAscending = !isAscending;
+        
+        setIsAscending(nextIsAscending);
 
         // Sort the todoList based on the new sorting order
         setTodoList((prevTodoList) =>
             [...prevTodoList].sort((a, b) => {
-                if (isAscending) {
+                if (nextIsAscending) {
                     return a.createdTime < b.createdTime ? -1 : 1;
                 } else {
                     return a.createdTime > b.createdTime ? -1 : 1;
