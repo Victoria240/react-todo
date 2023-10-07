@@ -90,7 +90,7 @@ function TodoContainer() {
         // Send the DELETE request
         fetch(deleteUrl, options)
             .then((response) => {
-                if (response.status === 204) {
+                if (response.status === 200) {
                     // Deletion was successful, proceed to update the todoList state
                     // Filter the todoList to exclude the record with the specified id
                     const updatedTodoList = todoList.filter((todo) => todo.id !== id);
