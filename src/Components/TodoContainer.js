@@ -51,7 +51,7 @@ function TodoContainer() {
         }
     }, [isAscending]);
 
-    // Fetch data on initial render and whenever sorting order changes
+    // Fetch data on initial render
     useEffect(() => {
         fetchData();
         // eslint-disable-next-line 
